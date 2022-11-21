@@ -46,7 +46,7 @@ class ToDoListViewCell: UITableViewCell {
     static func nib() -> UINib {
         return UINib(nibName: "ToDoListViewCell", bundle: nil)
     }
-        
+
     // *****
     // Notify the parent view controller about the switch value changes
     // *****
@@ -97,7 +97,7 @@ class ToDoListViewCell: UITableViewCell {
                 //check for due date has passed
                 let now = Date.now
                 if theDate < now {
-                    lblDesc.textColor = Utility.getUIColor("#AAAAAA")
+                    lblDesc.textColor = UIColor.red
                     lblDesc.backgroundColor = Utility.getUIColor("#F6F6F6")
                     desc = "Late: \(dateFormatter.string(from: theDate))"
                 } else {

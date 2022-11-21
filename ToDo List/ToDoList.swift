@@ -40,6 +40,9 @@ class ToDoList {
         }
     }
     
+    // *****
+    // Create a new item with default values
+    // *****
     func addBlankItem(_ title: String = "New Task") {
         // create a new item with an unique id
         let newItem = ToDoItem(
@@ -55,18 +58,28 @@ class ToDoList {
         saveToDoList()
     }
     
+    // *****
+    // Remove an item provided from the dictionary
+    // *****
     func removeItem(_ inItem: ToDoItem) {
         toDoItems[inItem.id] = nil
         saveToDoList()
     }
     
+    // *****
+    // Insert an item provided into the dictionary at a given position
+    // *****
     func insertItemAt(index: Int, item: ToDoItem) {
         var newItem = item
+        // This is to place the item before any existing one of the desire position
         newItem.seq = index * 10 - 5
         toDoItems[newItem.id] = newItem
         saveToDoList()
     }
     
+    // *****
+    // Remove an item provided from the dictionary at a given position
+    // *****
     func removeItemAt(_ index: Int) {
         let itemArray = getAllItems()
         for (idx, item) in itemArray.enumerated() {
@@ -77,6 +90,9 @@ class ToDoList {
         saveToDoList()
     }
 
+    // *****
+    // Replace a given item in the dictionary by using the id
+    // *****
     func replaceItem(_ inItem: ToDoItem) {
         if !inItem.id.isEmpty {
             if toDoItems[inItem.id] != nil {
@@ -86,19 +102,31 @@ class ToDoList {
         }
     }
     
+    // *****
+    // Return number of items in the dictionary
+    // *****
     func count() -> Int {
         return toDoItems.count
     }
     
+    // *****
+    // Return all values of the dictionary in an array
+    // *****
     func getAllItems() -> [ToDoItem] {
         //gives the results in ascending order of the seq field
         return Array(toDoItems.values).sorted(by: { $0.seq < $1.seq })
     }
     
+    // *****
+    // Return an item with a specific id as the key
+    // *****
     func getItems(withKey: String ) -> ToDoItem? {
         return toDoItems[withKey]
     }
     
+    // *****
+    // Re-assign the sequency number in the multiple of 10
+    // *****
     private func reorgSeq() {
         let itemArray = getAllItems()
         for (index, var item) in itemArray.enumerated() {
@@ -107,6 +135,9 @@ class ToDoList {
         }
     }
     
+    // *****
+    // Save the list to the user default
+    // *****
     private func saveToDoList() {
         reorgSeq()
         if let encoded = try? JSONEncoder().encode(toDoItems) {
