@@ -48,8 +48,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         
         //Style of notes text view
         notesTextView.delegate = self
-        notesTextView.text = "Description"
-        notesTextView.textColor = UIColor.systemGray3
+        notesTextView.textColor = UIColor.black
         notesTextView.layer.borderWidth = 1
         notesTextView.layer.borderColor = UIColor.systemGray5.cgColor
         notesTextView.layer.cornerRadius = 10
@@ -60,7 +59,10 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         if let currentItem = editingItem {
             let todayDate = Date()
             nameTextField.text = currentItem.name
-            notesTextView.text = currentItem.notes
+            notesTextView.text = (currentItem.notes == "") ? placeHolderText : currentItem.notes
+            if currentItem.notes == "" || currentItem.notes == placeHolderText {
+                notesTextView.textColor = UIColor.lightGray
+            }
             dateSwitch.setOn(currentItem.hasDueDate, animated: true)
             statusSwitch.setOn(currentItem.isCompleted, animated: true)
             if currentItem.hasDueDate {
