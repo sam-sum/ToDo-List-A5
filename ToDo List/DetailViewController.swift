@@ -77,6 +77,9 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         let tapGesture = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+        
+        //Hide the back button on the upper left
+        self.navigationItem.setHidesBackButton(true, animated: true)
     }
     
     // *****
