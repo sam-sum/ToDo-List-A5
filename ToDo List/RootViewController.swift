@@ -80,8 +80,10 @@ class RootViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-    
+            let data = toDoList.getAllItems()
+            let deleteItem = data[indexPath.row]
+            toDoList.removeItem(deleteItem)
+            tableView.reloadData()
         }
     }
     
@@ -103,27 +105,7 @@ class RootViewController: UITableViewController {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
-/*
-    // *****
-    // Additional function to prepare selected data to be passed to the detail screen
-    // *****
-    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        print("Row \(indexPath.row)selected")
-        let data = toDoList.getAllItems()
-        selectedItem = data[indexPath.row]
-        performSegue(withIdentifier: "DetailScreen", sender: self)
-    }
 
-    // *****
-    // Additional function to pass selected data to be passed to the detail screen
-    // *****
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier == "detailView") {
-            var vc = segue.destination as! DetailViewController
-           vc.passedItem = selectedItem
-        }
-    }
-*/
     // *****
     // Action function to handle adding a new task entry
     // *****
