@@ -91,14 +91,21 @@ class ToDoListViewCell: UITableViewCell {
     // *****
     func getDescription(_ item: ToDoItem) -> String {
         var desc = "No due date"
-
+        lblDesc.textColor = UIColor.white
+        lblDesc.backgroundColor = UIColor.clear
+        
         if item.hasDueDate {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateStyle = .short
-            dateFormatter.timeStyle = .short
+            dateFormatter.dateFormat = "MMM d, yyyy @h:mm a"
             dateFormatter.locale = Locale(identifier: "ca")
             if let theDate = item.dueDate {
-                desc = dateFormatter.string(from: theDate)
+                desc = "Due: \(dateFormatter.string(from: theDate))"
+                //check for due date has passed
+                let now = Date.now
+                if theDate < now {
+                    lblDesc.textColor = Utility.getUIColor("#AAAAAA")
+                    lblDesc.backgroundColor = Utility.getUIColor("#F6F6F6")
+                }
             }
         }
         

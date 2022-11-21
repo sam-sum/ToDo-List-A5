@@ -17,6 +17,7 @@ import UIKit
 
 class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
+    private var toDoList: ToDoList!
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
@@ -37,6 +38,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        toDoList = ToDoList.sharedToDoList
         
         //Style of task name text field
         nameTextField.delegate = self
@@ -50,6 +52,8 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         notesTextView.layer.borderWidth = 1
         notesTextView.layer.borderColor = UIColor.systemGray5.cgColor
         notesTextView.layer.cornerRadius = 10
+        
+        dueDatePicker.addTarget(self, action: #selector(self.handler(sender:)), for: UIControl.Event.valueChanged)
         
         //prepare initial values passed from the selected cell
         if let currentItem = editingItem {
@@ -81,14 +85,25 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func handler(sender: UIDatePicker) {
+        editingItem?.dueDate = dueDatePicker.date
     }
-    */
 
+    @IBAction func DidChangedValueDueDateSwitch(_ sender: UISwitch) {
+        if sender.isOn {
+            dueDatePicker.isEnabled = true
+        } else {
+            dueDatePicker.isEnabled = false
+        }
+        editingItem?.hasDueDate = sender.isOn
+    }
+    
+    @IBAction func DidChangedValueStatusSwitch(_ sender: UISwitch) {
+        editingItem?.isCompleted = sender.isOn
+    }
+    
+    @IBAction func DidPressedSaveButton(_ sender: UIButton) {
+        toDoList.replaceItem(editingItem!)
+        self.navigationController?.popToRootViewController(animated: true)
+    }
 }

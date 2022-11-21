@@ -90,11 +90,17 @@
                                         <rect key="frame" x="315" y="270" width="49" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="onTintColor" red="0.93725490570000003" green="0.59215688710000003" blue="0.58431375029999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <connections>
+                                            <action selector="DidChangedValueDueDateSwitch:" destination="aUw-W7-jtx" eventType="valueChanged" id="ZrC-1R-2Gk"/>
+                                        </connections>
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b7a-jH-rJo" userLabel="StatusSwitch">
                                         <rect key="frame" x="315" y="371" width="49" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="onTintColor" red="0.93725490570000003" green="0.59215688710000003" blue="0.58431375029999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <connections>
+                                            <action selector="DidChangedValueStatusSwitch:" destination="aUw-W7-jtx" eventType="valueChanged" id="UnG-oU-Ohf"/>
+                                        </connections>
                                     </switch>
                                     <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="ikG-Gb-4XK">
                                         <rect key="frame" x="74" y="313" width="245" height="50"/>
@@ -113,6 +119,9 @@
                                         <color key="tintColor" red="0.93725490570000003" green="0.59215688710000003" blue="0.58431375029999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="arrow.up.arrow.down.circle" catalog="system"/>
+                                        <connections>
+                                            <action selector="DidPressedSaveButton:" destination="aUw-W7-jtx" eventType="touchUpInside" id="u8b-kw-6gR"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zdf-ln-CRB">
                                         <rect key="frame" x="175" y="698" width="50" height="35"/>
