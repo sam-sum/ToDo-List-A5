@@ -24,7 +24,9 @@ class ToDoListViewCell: UITableViewCell {
 
     @IBOutlet weak var switchIsCompleted: UISwitch!{
         didSet {
-            switchIsCompleted.thumbTintColor = .systemGray2
+            switchIsCompleted.thumbTintColor = .white
+            switchIsCompleted.tintColor = .systemGray6
+            switchIsCompleted.onTintColor = .systemGray2
             switchIsCompleted.backgroundColor = .white
             switchIsCompleted.layer.cornerRadius = 16.0
         }
@@ -44,17 +46,7 @@ class ToDoListViewCell: UITableViewCell {
     static func nib() -> UINib {
         return UINib(nibName: "ToDoListViewCell", bundle: nil)
     }
-    
-    @IBAction func SwitchColor(_ sender: Any) {
-        if switchIsCompleted.isOn {
-            switchIsCompleted.thumbTintColor = .systemGray6
-            switchIsCompleted.onTintColor = .systemGray2
-        } else {
-            switchIsCompleted.thumbTintColor = .systemGray2
-            switchIsCompleted.backgroundColor = .white
-            switchIsCompleted.layer.cornerRadius = 16.0
-        }
-    }
+        
     // *****
     // Notify the parent view controller about the switch value changes
     // *****
@@ -80,7 +72,9 @@ class ToDoListViewCell: UITableViewCell {
         lblTitle.text = item.name
         lblDesc.text = getDescription(item)
         if item.isCompleted {
-            viewCell.backgroundColor = UIColor.gray
+            viewCell.backgroundColor = Utility.getUIColor("#AAAAAA")
+            lblDesc.textColor = UIColor.white
+            lblDesc.backgroundColor = UIColor.clear
         } else {
             viewCell.backgroundColor = Utility.getUIColor("#FF9292")
         }
@@ -99,12 +93,15 @@ class ToDoListViewCell: UITableViewCell {
             dateFormatter.dateFormat = "MMM d, yyyy @h:mm a"
             dateFormatter.locale = Locale(identifier: "ca")
             if let theDate = item.dueDate {
-                desc = "Due: \(dateFormatter.string(from: theDate))"
+
                 //check for due date has passed
                 let now = Date.now
                 if theDate < now {
                     lblDesc.textColor = Utility.getUIColor("#AAAAAA")
                     lblDesc.backgroundColor = Utility.getUIColor("#F6F6F6")
+                    desc = "Late: \(dateFormatter.string(from: theDate))"
+                } else {
+                    desc = "Due date: \(dateFormatter.string(from: theDate))"
                 }
             }
         }

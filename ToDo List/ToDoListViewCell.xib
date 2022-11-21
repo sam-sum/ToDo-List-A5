@@ -25,7 +25,6 @@
                                 <color key="onTintColor" systemColor="systemGray2Color"/>
                                 <color key="thumbTintColor" systemColor="systemGray6Color"/>
                                 <connections>
-                                    <action selector="SwitchColor:" destination="KGk-i7-Jjw" eventType="valueChanged" id="V53-dp-afb"/>
                                     <action selector="didChangeSwitchValue:" destination="KGk-i7-Jjw" eventType="valueChanged" id="2bV-ld-XKR"/>
                                 </connections>
                             </switch>
