@@ -19,6 +19,7 @@ class RootViewController: UITableViewController {
 
     private var cellPointSize: CGFloat!
     private var toDoList: ToDoList!
+    //private var selectedItem: ToDoItem?
     private static let toDoItemCell = "Items"
     
     override func viewDidLoad() {
@@ -66,17 +67,16 @@ class RootViewController: UITableViewController {
     }
     
     // *****
-    // Additional functions to edit the table view
+    // Additional function sets the table view cell be editable
     // *****
-    
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
      
-    
-    // Override to support editing the table view.
+    // *****
+    // Additional function handles the deletion of a table cell
+    // *****
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
@@ -84,22 +84,49 @@ class RootViewController: UITableViewController {
     
         }
     }
-
     
-    // Override to support rearranging the table view.
+    // *****
+    // Additional function supports rearranging the table view
+    // *****
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+        let data = toDoList.getAllItems()
+        let movedItem = data[fromIndexPath.row]
+        toDoList.removeItemAt(fromIndexPath.row)
+        toDoList.insertItemAt(index: to.row, item: movedItem)
         tableView.reloadData()
     }
     
-
-    // Override to support conditional rearranging of the table view.
+    // *****
+    // Additional function sets the table view cell be rearrangable
+    // *****
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
+/*
+    // *****
+    // Additional function to prepare selected data to be passed to the detail screen
+    // *****
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        print("Row \(indexPath.row)selected")
+        let data = toDoList.getAllItems()
+        selectedItem = data[indexPath.row]
+        performSegue(withIdentifier: "DetailScreen", sender: self)
+    }
 
-    
-
+    // *****
+    // Additional function to pass selected data to be passed to the detail screen
+    // *****
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "detailView") {
+            var vc = segue.destination as! DetailViewController
+           vc.passedItem = selectedItem
+        }
+    }
+*/
+    // *****
+    // Action function to handle adding a new task entry
+    // *****
     @IBAction func didPressedAddButton(_ sender: UIBarButtonItem) {
         print("didPressedAddButton.")
         
@@ -119,16 +146,36 @@ class RootViewController: UITableViewController {
 
 }
 
+// *****
+// Extent the class to add action functions required by the protocol
+// *****
 extension RootViewController: ToDoListViewCellDelegate {
+    
     func didChangeSwitchValue(with tag: Int, value: Bool) {
-        print ("Switch: \(tag), \(value)")
-
+        print ("didChangeSwitchValue: \(tag), \(value)")
+        var toDoItem: ToDoItem?
+        let fullList = toDoList.getAllItems()
+        for item in fullList {
+            //seq has to be divided by 10 as it is in the multipe of 10
+            if (item.seq / 10) == tag {
+                toDoItem = item
+            }
+        }
+        print ("Current toDoList item: \(toDoItem?.id ?? "" )")
+        if var theItem = toDoItem {
+            theItem.isCompleted = !theItem.isCompleted
+            toDoList.replaceItem(theItem)
+            print ("toDoList updated")
+            tableView.reloadData()
+        }
     }
     
     func didClickedEditButton(with tag: Int) {
         print ("Button: \(tag)")
+        let data = toDoList.getAllItems()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "DetailScreen")
+        let vc = storyboard.instantiateViewController(withIdentifier: "DetailScreen") as! DetailViewController
+        vc.editingItem = data[tag]
         self.navigationController?.pushViewController(vc,animated:true)
     }
     

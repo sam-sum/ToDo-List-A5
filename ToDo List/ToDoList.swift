@@ -18,10 +18,12 @@ import UIKit
 
 struct ToDoItem: Codable {
     var id: String
-    var title: String
-    var desc: String
-    var dueDate: Date?
+    var seq: Int        // sequence number in the multiple of 10
+    var name: String
+    var notes: String
     var isCompleted: Bool
+    var hasDueDate: Bool
+    var dueDate: Date?
 }
 
 class ToDoList {
@@ -42,21 +44,40 @@ class ToDoList {
         // create a new item with an unique id
         let newItem = ToDoItem(
             id: UUID().uuidString,
-            title: title,
-            desc: "",
-            dueDate: nil,
-            isCompleted: false
+            seq: toDoItems.count * 10,
+            name: title,
+            notes: "",
+            isCompleted: false,
+            hasDueDate: false,
+            dueDate: nil
         )
         toDoItems[newItem.id] = newItem
         saveToDoList()
     }
     
-    func removeItem(inItem: ToDoItem) {
+    func removeItem(_ inItem: ToDoItem) {
         toDoItems[inItem.id] = nil
         saveToDoList()
     }
+    
+    func insertItemAt(index: Int, item: ToDoItem) {
+        var newItem = item
+        newItem.seq = index * 10 - 5
+        toDoItems[newItem.id] = newItem
+        saveToDoList()
+    }
+    
+    func removeItemAt(_ index: Int) {
+        let itemArray = getAllItems()
+        for (idx, item) in itemArray.enumerated() {
+            if idx == index {
+                toDoItems[item.id] = nil
+            }
+        }
+        saveToDoList()
+    }
 
-    func replaceItem(inItem: ToDoItem) {
+    func replaceItem(_ inItem: ToDoItem) {
         if !inItem.id.isEmpty {
             if toDoItems[inItem.id] != nil {
                 toDoItems[inItem.id] = inItem
@@ -70,10 +91,24 @@ class ToDoList {
     }
     
     func getAllItems() -> [ToDoItem] {
-        return Array(toDoItems.values)
+        //gives the results in ascending order of the seq field
+        return Array(toDoItems.values).sorted(by: { $0.seq < $1.seq })
+    }
+    
+    func getItems(withKey: String ) -> ToDoItem? {
+        return toDoItems[withKey]
+    }
+    
+    private func reorgSeq() {
+        let itemArray = getAllItems()
+        for (index, var item) in itemArray.enumerated() {
+            item.seq = index * 10
+            toDoItems[item.id] = item
+        }
     }
     
     private func saveToDoList() {
+        reorgSeq()
         if let encoded = try? JSONEncoder().encode(toDoItems) {
             let defaults = UserDefaults.standard
             defaults.setValue(encoded, forKey: "toDoItems")

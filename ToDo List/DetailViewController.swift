@@ -18,48 +18,66 @@ import UIKit
 class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
     
-    @IBOutlet weak var NameLabel: UILabel!
-    @IBOutlet weak var NotesLabel: UILabel!
-    @IBOutlet weak var DateLabel: UILabel!
-    @IBOutlet weak var StatusLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var notesLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
     
-    @IBOutlet weak var NameTextField: UITextField!
-    @IBOutlet weak var NotesTextView: UITextView!
-    @IBOutlet weak var DateSwitch: UISwitch!
-    @IBOutlet weak var StatusSwitch: UISwitch!
+    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var notesTextView: UITextView!
+    @IBOutlet weak var dateSwitch: UISwitch!
+    @IBOutlet weak var statusSwitch: UISwitch!
+    @IBOutlet weak var dueDatePicker: UIDatePicker!
     
-    @IBOutlet weak var UpdateBtn: UIButton!
-    @IBOutlet weak var CancelBtn: UIButton!
-    @IBOutlet weak var DeleteBtn: UIButton!
+    @IBOutlet weak var updateBtn: UIButton!
+    @IBOutlet weak var cancelBtn: UIButton!
+    @IBOutlet weak var deleteBtn: UIButton!
+    
+    var editingItem: ToDoItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //Style of task name text field
-        NameTextField.delegate = self
-        NameTextField.layer.cornerRadius = 10
-        NameTextField.layer.borderColor = UIColor.systemGray5.cgColor
+        nameTextField.delegate = self
+        nameTextField.layer.cornerRadius = 10
+        nameTextField.layer.borderColor = UIColor.systemGray5.cgColor
         
         //Style of notes text view
-        NotesTextView.delegate = self
-        NotesTextView.text = "Description"
-        NotesTextView.textColor = UIColor.systemGray3
-        NotesTextView.layer.borderWidth = 1
-        NotesTextView.layer.borderColor = UIColor.systemGray5.cgColor
-        NotesTextView.layer.cornerRadius = 10
-
+        notesTextView.delegate = self
+        notesTextView.text = "Description"
+        notesTextView.textColor = UIColor.systemGray3
+        notesTextView.layer.borderWidth = 1
+        notesTextView.layer.borderColor = UIColor.systemGray5.cgColor
+        notesTextView.layer.cornerRadius = 10
+        
+        //prepare initial values passed from the selected cell
+        if let currentItem = editingItem {
+            let todayDate = Date()
+            nameTextField.text = currentItem.name
+            notesTextView.text = currentItem.notes
+            dateSwitch.setOn(currentItem.hasDueDate, animated: true)
+            statusSwitch.setOn(currentItem.isCompleted, animated: true)
+            if currentItem.hasDueDate {
+                dueDatePicker.date = currentItem.dueDate ?? todayDate
+                dueDatePicker.isEnabled = true
+            } else {
+                dueDatePicker.isEnabled = false
+            }
+        }
     }
+    
     //Setting placeholder inside the text view
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if NotesTextView.textColor == UIColor.systemGray3 {
-            NotesTextView.text = ""
-            NotesTextView.textColor = UIColor.black
+        if notesTextView.textColor == UIColor.systemGray3 {
+            notesTextView.text = ""
+            notesTextView.textColor = UIColor.black
         }
     }
     func textViewDidEndEditing(_ textView: UITextView) {
-        if NotesTextView.text == "" {
-            NotesTextView.text = "Description"
-            NotesTextView.textColor = UIColor.lightGray
+        if notesTextView.text == "" {
+            notesTextView.text = "Description"
+            notesTextView.textColor = UIColor.lightGray
         }
     }
 

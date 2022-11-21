@@ -32,6 +32,7 @@ class ToDoListViewCell: UITableViewCell {
     
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblDesc: UILabel!
+    @IBOutlet weak var viewCell: UIView!
     
     private var tagSwitch: Int = 0
     private var tagEditButton: Int = 0
@@ -76,8 +77,32 @@ class ToDoListViewCell: UITableViewCell {
         self.tagEditButton = row
         switchIsCompleted.tag = row
         switchIsCompleted.setOn(item.isCompleted, animated: false)
-        lblTitle.text = item.title
-        lblDesc.text = item.desc
+        lblTitle.text = item.name
+        lblDesc.text = getDescription(item)
+        if item.isCompleted {
+            viewCell.backgroundColor = UIColor.gray
+        } else {
+            viewCell.backgroundColor = Utility.getUIColor("#FF9292")
+        }
+    }
+    
+    // *****
+    // Determine the decription according to the item content
+    // *****
+    func getDescription(_ item: ToDoItem) -> String {
+        var desc = "No due date"
+
+        if item.hasDueDate {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .short
+            dateFormatter.locale = Locale(identifier: "ca")
+            if let theDate = item.dueDate {
+                desc = dateFormatter.string(from: theDate)
+            }
+        }
+        
+        return desc
     }
     
     override func awakeFromNib() {

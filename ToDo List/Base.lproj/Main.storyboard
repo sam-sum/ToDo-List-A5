@@ -166,6 +166,7 @@
                         <outlet property="StatusLabel" destination="1IQ-N0-kMf" id="J2A-h6-Zd3"/>
                         <outlet property="StatusSwitch" destination="b7a-jH-rJo" id="3X8-Js-55g"/>
                         <outlet property="UpdateBtn" destination="hps-A1-nB8" id="78p-cp-G9x"/>
+                        <outlet property="dueDatePicker" destination="ikG-Gb-4XK" id="P3G-Gx-06e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YEI-ah-Qh5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
