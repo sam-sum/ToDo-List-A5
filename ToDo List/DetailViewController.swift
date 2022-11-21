@@ -35,7 +35,8 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     @IBOutlet weak var deleteBtn: UIButton!
     
     var editingItem: ToDoItem?
-    
+    let placeHolderText = "Description"
+
     override func viewDidLoad() {
         super.viewDidLoad()
         toDoList = ToDoList.sharedToDoList
@@ -69,26 +70,47 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
                 dueDatePicker.isEnabled = false
             }
         }
+        
+        //Dismiss the keyboard if the user tap outside the text field
+        let tapGesture = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
-    //Setting placeholder inside the text view
+    // *****
+    // Setting placeholder inside the text view
+    // *****
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if notesTextView.textColor == UIColor.systemGray3 {
-            notesTextView.text = ""
-            notesTextView.textColor = UIColor.black
+        textView.textColor = UIColor.black
+        if textView == notesTextView {
+            if textView.text == placeHolderText {
+                textView.text = ""
+            }
         }
     }
+    
+    // *****
+    // Incoperate defaults settings for the notes text view
+    // *****
     func textViewDidEndEditing(_ textView: UITextView) {
-        if notesTextView.text == "" {
-            notesTextView.text = "Description"
-            notesTextView.textColor = UIColor.lightGray
+        if textView == notesTextView {
+            if textView.text == "" {
+                textView.text = placeHolderText
+                textView.textColor = UIColor.lightGray
+            }
         }
     }
 
+    // *****
+    // A handler function to get the date value upon the datepicker selection
+    // *****
     @objc func handler(sender: UIDatePicker) {
         editingItem?.dueDate = dueDatePicker.date
     }
 
+    // *****
+    // Action function to toggle the hasDueDate switch
+    // *****
     @IBAction func DidChangedValueDueDateSwitch(_ sender: UISwitch) {
         if sender.isOn {
             dueDatePicker.isEnabled = true
@@ -98,12 +120,38 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         editingItem?.hasDueDate = sender.isOn
     }
     
+    // *****
+    // Action function to toggle the isCompleted switch
+    // *****
     @IBAction func DidChangedValueStatusSwitch(_ sender: UISwitch) {
         editingItem?.isCompleted = sender.isOn
     }
     
+    // *****
+    // Action function to update the ToDo item with an alert diaglog
+    // *****
     @IBAction func DidPressedSaveButton(_ sender: UIButton) {
-        toDoList.replaceItem(editingItem!)
-        self.navigationController?.popToRootViewController(animated: true)
+        let updateAlert = UIAlertController(title: "Update", message: "Confirm to update the Todo?", preferredStyle: UIAlertController.Style.alert)
+
+        updateAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            print("Update alert OK pressed")
+            self.toDoList.replaceItem(self.editingItem!)
+            self.navigationController?.popToRootViewController(animated: true)
+        }))
+
+        updateAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            print("Update alert CANCEL pressed")
+        }))
+
+        present(updateAlert, animated: true, completion: nil)
+    }
+    
+    // *****
+    // Dismiss the keyboard when return key is clicked
+    // *****
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        //self.view.endEditing(true)
+        return true
     }
 }

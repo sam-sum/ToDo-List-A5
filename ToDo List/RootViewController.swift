@@ -122,7 +122,7 @@ class RootViewController: UITableViewController {
             self.toDoList.addBlankItem(textField?.text ?? "New title")
             self.tableView.reloadData()
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         self.present(alert, animated: true, completion: nil)
     }
 
