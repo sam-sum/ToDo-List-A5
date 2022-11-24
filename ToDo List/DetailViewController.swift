@@ -140,6 +140,8 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
 
         updateAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
             print("Update alert OK pressed")
+            self.editingItem?.name = self.nameTextField.text == nil ? "" : self.nameTextField.text!
+            self.editingItem?.notes = self.notesTextView.text == nil ? "" : self.notesTextView.text!
             self.toDoList.replaceItem(self.editingItem!)
             self.navigationController?.popToRootViewController(animated: true)
         }))
