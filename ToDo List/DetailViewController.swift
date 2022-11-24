@@ -34,6 +34,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var deleteBtn: UIButton!
     
+    var originalItem: ToDoItem?
     var editingItem: ToDoItem?
     let placeHolderText = "Description"
 
@@ -54,6 +55,15 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         notesTextView.layer.cornerRadius = 10
         
         dueDatePicker.addTarget(self, action: #selector(self.handler(sender:)), for: UIControl.Event.valueChanged)
+        
+        // keep the unmodified values of the todo item
+        originalItem = ToDoItem(id: editingItem!.id,
+                                seq: editingItem!.seq,
+                                name: editingItem!.name,
+                                notes: editingItem!.notes,
+                                isCompleted: editingItem!.isCompleted,
+                                hasDueDate: editingItem!.hasDueDate,
+                                dueDate: editingItem!.dueDate)
         
         //prepare initial values passed from the selected cell
         if let currentItem = editingItem {
@@ -133,7 +143,7 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
     }
     
     // *****
-    // Action function to update the ToDo item with an alert diaglog
+    // Action function to update the ToDo item with an alert dialog
     // *****
     @IBAction func DidPressedSaveButton(_ sender: UIButton) {
         let updateAlert = UIAlertController(title: "Update", message: "Confirm to update the Todo?", preferredStyle: UIAlertController.Style.alert)
@@ -151,6 +161,85 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
         }))
 
         present(updateAlert, animated: true, completion: nil)
+    }
+    
+    // *****
+    // Action function to cancel the update of the ToDo item with an alert dialog
+    // *****
+    @IBAction func DidPressedCancelButton(_ sender: UIButton) {
+        if (isTodoItemModified()) {
+            let cancelAlert = UIAlertController(title: "Cancel",
+                                                message: "Confirm to cancel the update of the Todo?",
+                                                preferredStyle: UIAlertController.Style.alert)
+            
+            cancelAlert.addAction(UIAlertAction(
+                title: "OK",
+                style: .default,
+                handler: { (action: UIAlertAction!) in
+                    print("Cancel alert OK pressed")
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
+            ))
+            
+            cancelAlert.addAction(UIAlertAction(
+                title: "Cancel",
+                style: .cancel,
+                handler: { (action: UIAlertAction!) in
+                    print("Cancel alert CANCEL pressed")
+                }
+            ))
+            
+            present(cancelAlert, animated: true, completion: nil)
+        }
+        else {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+    }
+    
+    // *****
+    // return if the todo item has been modified
+    // *****
+    private func isTodoItemModified() -> Bool {
+        if (originalItem!.name != (nameTextField.text == nil ? "" : nameTextField.text!)
+            || originalItem!.notes != (notesTextView.text == nil ? "" : notesTextView.text!)
+            || originalItem!.isCompleted != statusSwitch.isOn
+            || originalItem!.hasDueDate != dateSwitch.isOn
+            || originalItem!.dueDate != dueDatePicker.date
+        ) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    
+    // *****
+    // Action function to delete the ToDo item with an alert dialog
+    // *****
+    @IBAction func DidPressedDeleteButton(_ sender: UIButton) {
+        let deleteAlert = UIAlertController(title: "Delete",
+                                            message: "Confirm to delete the Todo?",
+                                            preferredStyle: UIAlertController.Style.alert)
+        
+        deleteAlert.addAction(UIAlertAction(
+            title: "OK",
+            style: .default,
+            handler: { (action: UIAlertAction!) in
+                print("Delete alert OK pressed")
+                self.toDoList.removeItem(self.editingItem!)
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+        ))
+        
+        deleteAlert.addAction(UIAlertAction(
+            title: "Cancel",
+            style: .cancel,
+            handler: { (action: UIAlertAction!) in
+                print("Delete alert CANCEL pressed")
+            }
+        ))
+        
+        present(deleteAlert, animated: true, completion: nil)
     }
     
     // *****

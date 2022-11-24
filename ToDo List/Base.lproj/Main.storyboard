@@ -131,6 +131,9 @@
                                         <color key="tintColor" red="0.93725490570000003" green="0.59215688710000003" blue="0.58431375029999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="xmark.circle" catalog="system"/>
+                                        <connections>
+                                            <action selector="DidPressedCancelButton:" destination="aUw-W7-jtx" eventType="touchUpInside" id="aXc-nk-229"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BQS-Qt-xcj">
                                         <rect key="frame" x="307" y="698" width="50" height="35"/>
@@ -138,6 +141,9 @@
                                         <color key="tintColor" red="0.93725490570000003" green="0.59215688710000003" blue="0.58431375029999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="trash.circle" catalog="system"/>
+                                        <connections>
+                                            <action selector="DidPressedDeleteButton:" destination="aUw-W7-jtx" eventType="touchUpInside" id="ZsO-2o-QHb"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
