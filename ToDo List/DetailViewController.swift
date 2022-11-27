@@ -152,6 +152,8 @@ class DetailViewController: UIViewController, UITextViewDelegate, UITextFieldDel
             print("Update alert OK pressed")
             self.editingItem?.name = self.nameTextField.text == nil ? "" : self.nameTextField.text!
             self.editingItem?.notes = self.notesTextView.text == nil ? "" : self.notesTextView.text!
+            // even do not have due date, save a default due date for it as the requirement stated
+            self.editingItem?.dueDate = self.dueDatePicker.date
             self.toDoList.replaceItem(self.editingItem!)
             self.navigationController?.popToRootViewController(animated: true)
         }))
